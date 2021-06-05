@@ -1930,6 +1930,17 @@ size_t answer_request(struct dns_header *header, char *limit, size_t qlen,
 	    }
 	}
 
+	/* filter A forwards */
+	if (qtype == T_A && option_bool(OPT_FILTER_A))
+	  {
+	    /* return a null reply */
+		ans = 1;
+		if (!dryrun)
+		  log_query(F_CONFIG | F_IPV6 | F_NEG, name, &addr, NULL);
+		break;
+	  }
+	/* end of filtering A */
+
       if (!ans)
 	return 0; /* failed to answer a question */
     }
